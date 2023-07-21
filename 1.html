@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Eduardo Herrero - Software Developer</title>
+  <!-- Add Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Fira Code', monospace;
+      line-height: 1.6;
+      margin: 20px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: #f7f7f7; /* Light gray background color */
+    }
+
+    .header-info {
+      text-align: center;
+      margin-bottom: 30px; /* Add more space between header and summary */
+    }
+
+    h1 {
+      color: #27ae60; /* Custom green color */
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 20px;
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+
+    p {
+      margin: 5px 0;
+    }
+
+    .summary-button {
+      cursor: pointer;
+      background-color: #e9f1ff; /* Light blue background color for summary button */
+      padding: 3px 10px; /* Adjust width and height of the summary button */
+      border-radius: 5px;
+      margin-bottom: 20px; /* Add more space between header and tabs */
+      color: #000; /* Black color for summary button text */
+      text-align: center;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5); /* Transparent black background color for modal */
+    }
+
+    .modal-content {
+      background-color: #fff; /* White background color for modal content */
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      border-radius: 5px;
+    }
+
+    .close {
+      color: #888;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .tabs-container {
+      display: flex;
+      justify-content: center; /* Center the tabs horizontally */
+      margin-bottom: 40px; /* Add more space between header and tabs */
+    }
+
+    .tab {
+      cursor: pointer;
+      padding: 5px 10px;
+      background-color: #27ae60; /* Custom green background color for tabs */
+      border-radius: 5px;
+      margin-right: 10px;
+      border: 1px solid #27ae60; /* Custom green border color for tabs */
+      color: #fff; /* White text color for tabs */
+    }
+
+    .tab.active {
+      background-color: #2ecc71; /* Active tab background color (custom green) */
+      color: #fff; /* Active tab text color */
+      font-weight: bold; /* Add bold style to active tab */
+    }
+
+    .tab:not(.active) {
+      background-color: #fff; /* White background color for inactive tabs */
+      color: #27ae60; /* Custom green text color for inactive tabs */
+    }
+
+    .tab-content {
+      display: none;
+      margin-top: 10px; /* Increase separation from the vertical line */
+      margin-left: 20px;
+      padding: 10px;
+      background-color: transparent; /* Transparent background color for section content */
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .section-content p {
+      margin: 10px 0;
+      color: #000; /* Black color for section content text */
+    }
+
+    /* Coding Colors */
+    .token.keyword {
+      color: #007bff; /* Blue */
+    }
+
+    .token.variable {
+      color: #6f42c1; /* Purple */
+    }
+
+    .token.string {
+      color: #e83e8c; /* Pink */
+    }
+
+    .token.comment {
+      color: #17a2b8; /* Teal */
+    }
+
+    .token.punctuation {
+      color: #000; /* Black */
+    }
+  </style>
+</head>
+<body>
+  <div class="header-info">
+    <h1>Eduardo Herrero</h1>
+    <p>Software Developer | Barcelona, Spain</p>
+    <p>Email: <a href="mailto:eduhgb5198@gmail.com">eduhgb5198@gmail.com</a> | Phone: 660828319</p>
+    <p>GitHub: <a href="https://github.com/CVanderbilt" target="_blank">github.com/CVanderbilt</a> | LinkedIn: <a href="https://www.linkedin.com/in/eduardo-herrero-97a854206/" target="_blank">linkedin.com/in/eduardo-herrero-97a854206</a></p>
+  </div>
+
+  <div class="summary-button" onclick="openSummary()">Click to view Summary</div>
+
+  <!-- Modal -->
+  <div id="summaryModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close" onclick="closeSummary()">&times;</span>
+      <p>Welcome to my interactive CV! 👋</p>
+      <p>I'm a passionate software developer with a wide range of experience delivering high-standard solutions. I thrive on finding innovative ways to solve problems and embrace constant learning in the dynamic programming world. Skilled in peer-to-peer collaboration, self-directed learning, hard work, and time management.</p>
+      <p>In my free time, I pursue personal projects, including game development with Unity. Let's connect and explore how my expertise can add value to your team!</p>
+    </div>
+  </div>
+
+  <div class="tabs-container">
+    <div class="tab tab-experience active" onclick="openTab('experience')">EXPERIENCE</div>
+    <div class="tab tab-education" onclick="openTab('education')">EDUCATION</div>
+    <div class="tab tab-skills" onclick="openTab('skills')">SKILLS</div>
+    <div class="tab tab-projects" onclick="openTab('projects')">PROJECTS</div>
+  </div>
+
+  <!-- Interactive Experience Section -->
+  <div class="tab-content tab-experience active" id="experience">
+    <h2>Software Development Engineer Intern | AMAZON | Feb 2022 – Jul 2023</h2>
+    <ul>
+      <li>Spearheaded two full-scale projects as a full-stack developer during a full-time internship at Amazon Business.</li>
+      <li>Leveraged a variety of AWS cloud technologies, including Lambda, DynamoDB, EC2, and S3, as well as specialized services like SQS, SNS, and Cognito.</li>
+    </ul>
+
+    <h2>Freelancer | Upwork | Sept – Dec 2022</h2>
+    <ul>
+      <li>Worked as a freelance C++ developer, focusing on creating Adobe Media Encoder plugins.</li>
+      <li>Developed plugins enabling the smooth export of audio and visual content from videos into various file formats, including TIFF and WAVE.</li>
+      <li>Extensively utilized the official documentation provided by Adobe to ensure well-informed solutions that met the client's specific needs.</li>
+    </ul>
+
+    <h2>Nanoom Project | Feb 2020</h2>
+    <ul>
+      <li>Collaborated with a team to develop Nanoom, a groundbreaking solution that unified payment providers and Nano cryptocurrency wallets through a simple API, enabling pull payments in the crypto world.</li>
+      <li>Employed Go microservices with CouchDB and Swagger API documentation to streamline the development process.</li>
+    </ul>
+  </div>
+
+  <!-- Interactive Education Section -->
+  <div class="tab-content tab-education" id="education">
+    <h2>Computer Engineering | 42 Madrid Fundación Telefónica | 2020 – 2023</h2>
+    <p>
+      A three-year intensive program focused on building strong foundations in computer engineering, algorithms, and data structures.
+    </p>
+    <h2>Computer Engineering | Uned | Universidad Nacional de Educación a Distancia | 2020 – Currently</h2>
+    <p>
+      Ongoing studies in computer engineering, with a focus on distributed systems and network programming.
+    </p>
+    <h2>Computer Engineering + Business Management | URJC | Universidad Rey Juan Carlos | 2016 – 2019 (not finished)</h2>
+  </div>
+
+  <!-- Interactive Skills Section -->
+  <div class="tab-content tab-skills" id="skills">
+    <p>
+      <span class="icon">💻</span> Programming Languages: C, C#, C++, Java, JavaScript, GoLang, Kotlin, React, TypeScript
+    </p>
+    <p>
+      <span class="icon">🌐</span> Web Technologies: AWS
+    </p>
+    <p>
+      <span class="icon">⚙️</span> Tools: Git, Docker
+    </p>
+    <p>
+      <span class="icon">🎮</span> Game Development: Unity
+    </p>
+  </div>
+
+  <!-- Interactive Projects Section -->
+  <div class="tab-content tab-projects" id="projects">
+    <p>
+      Engaged in independent game development using Unity to continuously enhance my coding skills and creativity.
+    </p>
+  </div>
+
+  <script>
+    // JavaScript function to open summary modal
+    function openSummary() {
+      const summaryModal = document.getElementById('summaryModal');
+      summaryModal.style.display = 'block';
+    }
+
+    // JavaScript function to close summary modal
+    function closeSummary() {
+      const summaryModal = document.getElementById('summaryModal');
+      summaryModal.style.display = 'none';
+    }
+
+    // JavaScript function to open tabs
+    function openTab(tabId) {
+      const tabContent = document.querySelectorAll('.tab-content');
+      tabContent.forEach((content) => {
+        content.classList.remove('active');
+      });
+
+      const activeTab = document.getElementById(tabId);
+      activeTab.classList.add('active');
+
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach((tab) => {
+        tab.classList.remove('active');
+      });
+
+      const activeTabButton = document.querySelector(`.tab-${tabId}`);
+      activeTabButton.classList.add('active');
+    }
+  </script>
+</body>
+</html>
