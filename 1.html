@@ -171,14 +171,27 @@
       padding: 10px;
       background-color: transparent; /* Transparent background color for project content */
     }
+
+    /* Style for the project content container with maximum width */
+    .project-content-container {
+      max-width: 100%; /* Set the maximum width to 100% of the available space */
+      margin: 0 auto; /* Center the content horizontally */
+      padding: 10px; /* Add some padding for better visual appearance */
+    }
+
+    /* Style for images inside the project content */
+    .project-content-container img {
+      max-width: 100%; /* Set the maximum width of images to 100% of their container */
+      height: auto; /* Preserve the aspect ratio of the images */
+    }
   </style>
 </head>
 <body>
   <div class="header-info">
     <h1>Eduardo Herrero</h1>
     <p>Software Developer | Barcelona, Spain</p>
-    <p>Email: <a href="mailto:eduhgb5198@gmail.com">eduhgb5198@gmail.com</a> | Phone: 660828319</p>
-    <p>GitHub: <a href="https://github.com/CVanderbilt" target="_blank">github.com/CVanderbilt</a> | LinkedIn: <a href="https://www.linkedin.com/in/eduardo-herrero-97a854206/" target="_blank">linkedin.com/in/eduardo-herrero-97a854206</a></p>
+    <p>Email: <a href="mailto:eduhgb5198@gmail.com">eduhgb5198@gmail.com</a> | GitHub: <a href="https://github.com/CVanderbilt" target="_blank">github.com/CVanderbilt</a></p>
+    <p>LinkedIn: <a href="https://www.linkedin.com/in/eduardo-herrero-97a854206/" target="_blank">linkedin.com/in/eduardo-herrero-97a854206</a></p>
   </div>
 
   <div class="summary-button" onclick="openSummary()">Click to view Summary</div>
@@ -301,19 +314,21 @@
     async function fetchAndDisplayProjects() {
     const projectsList = document.getElementById('projectsList');
     const projectContent = document.getElementById('projectContent');
-    const githubUsername = 'CVanderbilt'; // Replace this with your GitHub username
     const projectsData = [
       {
         name: 'Planes',
-        readmeUrl: `https://raw.githubusercontent.com/${githubUsername}/Planes/main/README.md`,
+        readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/Planes/main/README.md",
+        repositoryUrl: "https://github.com/CVanderbilt/Planes"
       },
       {
         name: '1st Person interact mechanics',
-        readmeUrl: `https://raw.githubusercontent.com/${githubUsername}/PuzzleUnity/main/README.md`,
+        readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/PuzzleUnity/main/README.md",
+        repositoryUrl: "https://github.com/CVanderbilt/PuzzleUnity"
       },
       {
         name: 'Rubik\'s cube',
-        readmeUrl: `https://raw.githubusercontent.com/${githubUsername}/Rubik/master/README.md`,
+        readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/Rubik/master/README.md",
+        repositoryUrl: "https://github.com/CVanderbilt/Rubik"
       },
       // Add more projects as needed
     ];
@@ -328,7 +343,26 @@
         const response = await fetch(project.readmeUrl);
         const readmeContent = await response.text();
         projectButton.addEventListener('click', function () {
-          projectContent.innerHTML = marked(readmeContent);
+          // Create a container element for the project content
+          const projectContentContainer = document.createElement('div');
+          projectContentContainer.classList.add('project-content-container');
+
+          // Create the "Go to Repo" button and link
+          const repoButton = document.createElement('button');
+          repoButton.textContent = 'Go to Repo';
+          repoButton.classList.add('go-to-repo-button');
+          const repoLink = document.createElement('a');
+          repoLink.href = project.repositoryUrl; // Add the repository URL to the projectsData
+          repoLink.target = '_blank'; // Open in a new tab
+          repoLink.appendChild(repoButton);
+          projectContentContainer.appendChild(repoLink);
+
+          // Render the project content
+          projectContentContainer.innerHTML += marked(readmeContent);
+          
+          // Set the project content container as the content
+          projectContent.innerHTML = '';
+          projectContent.appendChild(projectContentContainer);
         });
       } catch (error) {
         projectButton.disabled = true;
