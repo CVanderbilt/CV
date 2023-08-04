@@ -229,8 +229,13 @@
 
   <!-- Interactive Projects Section -->
   <div class="tab-content tab-projects" id="projects">
-    <div id="projectsList">
-      <!-- Collapsible buttons for each project will be dynamically added here -->
+    <div class="projects-container">
+      <div id="projectsList" class="projects-list">
+        <!-- Collapsible buttons for each project will be dynamically added here -->
+      </div>
+      <div id="projectContent" class="project-content">
+        <!-- Project content will be dynamically added here -->
+      </div>
     </div>
   </div>
 
@@ -270,6 +275,7 @@
 
     async function fetchAndDisplayProjects() {
     const projectsList = document.getElementById('projectsList');
+    const projectContent = document.getElementById('projectContent');
     const githubUsername = 'CVanderbilt'; // Replace this with your GitHub username
     const projectsData = [
       {
@@ -289,37 +295,21 @@
 
     for (const project of projectsData) {
       const projectButton = document.createElement('button');
-      projectButton.classList.add('collapsible');
+      projectButton.classList.add('project-button');
       projectButton.innerText = project.name;
       projectsList.appendChild(projectButton);
-
-      const projectSection = document.createElement('div');
-      projectSection.classList.add('content');
-      projectsList.appendChild(projectSection);
 
       try {
         const response = await fetch(project.readmeUrl);
         const readmeContent = await response.text();
-        projectSection.innerHTML = marked(readmeContent); // Assuming you have the marked.js library for rendering Markdown
+        projectButton.addEventListener('click', function () {
+          projectContent.innerHTML = marked(readmeContent);
+        });
       } catch (error) {
-        projectSection.innerHTML = '<p>Failed to fetch project details.</p>';
+        projectButton.disabled = true;
         console.error(`Failed to fetch README.md for ${project.name}`, error);
       }
     }
-
-    // Add click event listeners to make the buttons collapsible
-    const collapsibleButtons = document.querySelectorAll('.collapsible');
-    collapsibleButtons.forEach((button) => {
-      button.addEventListener('click', function () {
-        this.classList.toggle('active');
-        const content = this.nextElementSibling;
-        if (content.style.display === 'block') {
-          content.style.display = 'none';
-        } else {
-          content.style.display = 'block';
-        }
-      });
-    });
   }
 
   // Call the function to fetch and display projects
