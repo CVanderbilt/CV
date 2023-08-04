@@ -229,11 +229,13 @@
 
   <!-- Interactive Projects Section -->
   <div class="tab-content tab-projects" id="projects">
-    <p>
-      Engaged in independent game development using Unity to continuously enhance my coding skills and creativity.
-    </p>
+    <div id="projectsList">
+      <!-- Collapsible buttons for each project will be dynamically added here -->
+    </div>
   </div>
 
+  <!-- Add marked.js library to render Markdown content -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.0.3/marked.min.js"></script>
   <script>
     // JavaScript function to open summary modal
     function openSummary() {
@@ -265,6 +267,64 @@
       const activeTabButton = document.querySelector(`.tab-${tabId}`);
       activeTabButton.classList.add('active');
     }
+
+    async function fetchAndDisplayProjects() {
+    const projectsList = document.getElementById('projectsList');
+    const githubUsername = 'CVanderbilt'; // Replace this with your GitHub username
+    const projectsData = [
+      {
+        name: 'Planes',
+        readmeUrl: `https://raw.githubusercontent.com/${githubUsername}/Planes/main/README.md`,
+      },
+      {
+        name: '1st Person interact mechanics',
+        readmeUrl: `https://raw.githubusercontent.com/${githubUsername}/PuzzleUnity/main/README.md`,
+      },
+      {
+        name: 'Rubik\'s cube',
+        readmeUrl: `https://raw.githubusercontent.com/${githubUsername}/Rubik/master/README.md`,
+      },
+      // Add more projects as needed
+    ];
+
+    for (const project of projectsData) {
+      const projectButton = document.createElement('button');
+      projectButton.classList.add('collapsible');
+      projectButton.innerText = project.name;
+      projectsList.appendChild(projectButton);
+
+      const projectSection = document.createElement('div');
+      projectSection.classList.add('content');
+      projectsList.appendChild(projectSection);
+
+      try {
+        const response = await fetch(project.readmeUrl);
+        const readmeContent = await response.text();
+        projectSection.innerHTML = marked(readmeContent); // Assuming you have the marked.js library for rendering Markdown
+      } catch (error) {
+        projectSection.innerHTML = '<p>Failed to fetch project details.</p>';
+        console.error(`Failed to fetch README.md for ${project.name}`, error);
+      }
+    }
+
+    // Add click event listeners to make the buttons collapsible
+    const collapsibleButtons = document.querySelectorAll('.collapsible');
+    collapsibleButtons.forEach((button) => {
+      button.addEventListener('click', function () {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  }
+
+  // Call the function to fetch and display projects
+  fetchAndDisplayProjects();
+
   </script>
 </body>
 </html>
