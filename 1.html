@@ -270,6 +270,12 @@
   <!-- Interactive Projects Section -->
   <div class="tab-content tab-projects" id="projects">
     <div class="projects-container">
+      <div class="project-set-dropdown">
+        <label for="projectSets">Select Project Set:</label>
+        <select id="projectSets" onchange="selectProjectSet()">
+          <!-- Options for project sets will be dynamically added here -->
+        </select>
+      </div>
       <div id="projectsList" class="projects-list">
         <!-- Collapsible buttons for each project will be dynamically added here -->
       </div>
@@ -278,6 +284,7 @@
       </div>
     </div>
   </div>
+
 
   <!-- Add marked.js library to render Markdown content -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.0.3/marked.min.js"></script>
@@ -313,43 +320,81 @@
       activeTabButton.classList.add('active');
     }
 
-    async function fetchAndDisplayProjects() {
-    const projectsList = document.getElementById('projectsList');
-    const projectContent = document.getElementById('projectContent');
-    const projectsData = [
-      {
-        name: 'Planes',
-        readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/Planes/main/README.md",
-        repositoryUrl: "https://github.com/CVanderbilt/Planes"
-      },
-      {
-        name: '1st Person interact mechanics',
-        readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/PuzzleUnity/main/README.md",
-        repositoryUrl: "https://github.com/CVanderbilt/PuzzleUnity"
-      },
-      {
-        name: 'Rubik\'s cube',
-        readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/Rubik/master/README.md",
-        repositoryUrl: "https://github.com/CVanderbilt/Rubik"
-      },
-      {
-        name: 'TopDown2DZ',
-        readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/TopDown2DZ/main/README.md",
-        repositoryUrl: "https://github.com/CVanderbilt/TopDown2DZ"
-      },
-      // Add more projects as needed
-    ];
+  const projectSets = [
+    {
+      name: 'Unity',
+      projects: [
+        {
+          name: 'Planes',
+          readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/Planes/main/README.md",
+          repositoryUrl: "https://github.com/CVanderbilt/Planes",
+          readmeContent: ""
+        },
+        {
+          name: '1st Person interact mechanics',
+          readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/PuzzleUnity/main/README.md",
+          repositoryUrl: "https://github.com/CVanderbilt/PuzzleUnity",
+          readmeContent: ""
+        },
+        {
+          name: 'Rubik\'s cube',
+          readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/Rubik/master/README.md",
+          repositoryUrl: "https://github.com/CVanderbilt/Rubik",
+          readmeContent: ""
+        },
+        {
+          name: 'TopDown2DZ',
+          readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/TopDown2DZ/main/README.md",
+          repositoryUrl: "https://github.com/CVanderbilt/TopDown2DZ",
+          readmeContent: ""
+        },
+      ]
+    },
+    {
+      name: '42 School',
+      projects: [
+        {
+          name: 'Transcendence',
+          readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/42Transcendence/main/README.md",
+          repositoryUrl: "https://github.com/CVanderbilt/42Transcendence",
+          readmeContent: ""
+        },
+        {
+          name: 'Webserv',
+          readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/42Webserv/turned_in_version/README.md",
+          repositoryUrl: "https://github.com/CVanderbilt/42Webserv",
+          readmeContent: ""
+        },
+        {
+          name: 'FT_Containers',
+          readmeUrl: "https://raw.githubusercontent.com/CVanderbilt/ft_containers_42/main/README.md",
+          repositoryUrl: "https://github.com/CVanderbilt/ft_containers_42",
+          readmeContent: ""
+        },
+      ]
+    },
+  ];
 
-    for (const project of projectsData) {
+  // JavaScript function to populate the project set dropdown and display projects
+  function selectProjectSet() {
+    const projectContent = document.getElementById('projectContent');
+    projectContent.innerHTML = ''; // Clear the project content
+    
+    const projectSetsDropdown = document.getElementById('projectSets');
+    const selectedSetIndex = projectSetsDropdown.selectedIndex;
+    const selectedSet = projectSets[selectedSetIndex];
+
+    const projectsList = document.getElementById('projectsList');
+    projectsList.innerHTML = ''; // Clear the projects list
+
+    for (const project of selectedSet.projects) {
       const projectButton = document.createElement('button');
       projectButton.classList.add('project-button');
       projectButton.innerText = project.name;
       projectsList.appendChild(projectButton);
 
-      try {
-        const response = await fetch(project.readmeUrl);
-        const readmeContent = await response.text();
-        projectButton.addEventListener('click', function () {
+      // Add click event listener to display project content
+      projectButton.addEventListener('click', function () {
           // Create a container element for the project content
           const projectContentContainer = document.createElement('div');
           projectContentContainer.classList.add('project-content-container');
@@ -365,21 +410,43 @@
           projectContentContainer.appendChild(repoLink);
 
           // Render the project content
-          projectContentContainer.innerHTML += marked(readmeContent);
+          projectContentContainer.innerHTML += marked(project.readmeContent);
           
           // Set the project content container as the content
           projectContent.innerHTML = '';
           projectContent.appendChild(projectContentContainer);
         });
-      } catch (error) {
-        projectButton.disabled = true;
-        console.error(`Failed to fetch README.md for ${project.name}`, error);
-      }
     }
   }
 
+  // JavaScript function to fetch and display project sets in the dropdown
+  async function fetchAndDisplayProjectSets() {
+    const projectSetsDropdown = document.getElementById('projectSets');
+
+    for (const projectSet of projectSets) {
+      const option = document.createElement('option');
+      option.value = projectSet.name;
+      option.text = projectSet.name;
+      projectSetsDropdown.appendChild(option);
+      for (const project of projectSet.projects) {
+        try {
+          const response = await fetch(project.readmeUrl);
+          project.readmeContent = await response.text();
+        } catch (error) {
+          console.error(`Failed to fetch README.md for ${project.name}`, error);
+        }
+      }
+    }
+    // Select the first project set by default
+    selectProjectSet();
+  }
+
+  // Call the function to fetch and display project sets
+  fetchAndDisplayProjectSets();
+
+
   // Call the function to fetch and display projects
-  fetchAndDisplayProjects();
+  // fetchAndDisplayProjects();
 
   </script>
 </body>
